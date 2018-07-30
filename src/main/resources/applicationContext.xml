@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-4.2.xsd
+           http://cxf.apache.org/jaxrs
+           http://cxf.apache.org/schemas/jaxrs.xsd
+           http://cxf.apache.org/core
+           http://cxf.apache.org/schemas/core.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.arb" />
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+
+	<bean id="applicationProperties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	</bean>
+
+	<cxf:bus>
+		<cxf:features>
+			<cxf:logging />
+		</cxf:features>
+	</cxf:bus>
+
+	<jaxrs:server name="webServices" address="http://0.0.0.0:8080">
+		<jaxrs:serviceBeans>
+			<ref bean="RestService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url"
+			value="jdbc:postgresql://elmer.db.elephantsql.com:5432/llvvrtml" />
+		<property name="username" value="llvvrtml" />
+		<property name="password" value="cj8J7cOZ0B5Q1Tw_BaYfZ8lnTi9Zn3cB" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+</beans>
